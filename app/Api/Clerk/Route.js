@@ -1,14 +1,14 @@
+import { Webhook } from "svix";
+import connectDB from "@/config/db";
+import User from "@/models/User";
 import { headers } from "next/headers";
 import { NextRequest } from "next/server";
 
-import connectDB from "@/config/db";
-import User from "@/Modal/User";
-import { Webhook } from "svix";
 
 export async function POST(req) {
     
     const wh = new Webhook(process.env.SIGN_IN_SECERET);
-    const headerPayload = headers()
+    const headerPayload = await headers()
     const svixHeader = {
         "svix-id":headerPayload.get("svix-id"),
         "svix-timestamp":headerPayload.get("svix-timestamp"),
@@ -23,7 +23,7 @@ export async function POST(req) {
     // prepare user data to save in db
     const userData = {
         _id: data.id,
-        email: data.email_address[0].email_address,
+        email: data.email_addresses[0].email_address,
         name: `${data.first_name} ${data.last_name}`,
         image : data.image_url
     }
