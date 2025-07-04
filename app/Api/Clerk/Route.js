@@ -1,9 +1,9 @@
 import { headers } from "next/headers";
 import { NextRequest } from "next/server";
 
-const { default: connectDB } = require("@/app/Config/db");
-const { default: User } = require("@/app/Modal/User");
-const { Webhook } = require("svix");
+import connectDB from "@/config/db";
+import User from "@/Modal/User";
+import { Webhook } from "svix";
 
 export async function POST(req) {
     
@@ -31,6 +31,7 @@ export async function POST(req) {
     await connectDB();
     switch (type) {
         case 'user.created':
+            console.log(type, userData)
             await User.create(userData)
             break;
         case 'user.updated':
